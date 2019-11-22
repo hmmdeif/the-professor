@@ -29,7 +29,12 @@ const updateOpenPosition = (conn: Client, order: any) => {
 
 export const updateOrders = (conn: Client, data: any) => {
   for (const order of data) {
-    if (order.order_state === 'filled' || order.order_state === 'cancelled') {
+    if (order.label === 'exit') {
+      if (order.order_state === 'filled') {
+        instruments[order.instrument_name].position.exit = null
+      }
+      instruments[order.instrument_name].position.amount -= order.filled_amount
+    } else if (order.order_state === 'filled' || order.order_state === 'cancelled') {
       removeOrderIfExists(order)
       updateOpenPosition(conn, order)
     }

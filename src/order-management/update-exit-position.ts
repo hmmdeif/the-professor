@@ -20,6 +20,6 @@ export const placeExitOrder = (conn: Client, instrument: string) => {
   if ('exit' in instruments[instrument].position) {
     conn.sendData('private/edit', { order_id: instruments[instrument].position.exit.id, amount: instruments[instrument].position.amount, price: exitPrice }, editOrder.bind(null, instruments[instrument].position.exit))
   } else {
-    conn.sendData(`private/${exitDirection}`, { instrument_name: instrument, amount: instruments[instrument].position.amount, type: 'limit', post_only: true, label: 'exit', price: exitPrice }, addExitOrder)
+    conn.sendData(`private/${exitDirection}`, { instrument_name: instrument, amount: instruments[instrument].position.amount, type: 'limit', label: 'exit', price: exitPrice }, addExitOrder)
   }
 }

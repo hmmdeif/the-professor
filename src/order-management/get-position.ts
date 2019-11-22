@@ -3,11 +3,11 @@ import { instruments } from '../state'
 import { placeExitOrder } from './update-exit-position'
 
 const updatePositionState = (conn: Client, instrument: string, position: any) => {
-  instruments[instrument].position.amount = position.size
+  instruments[instrument].position.amount = Math.abs(position.size)
   instruments[instrument].position.price = position.average_price
   instruments[instrument].position.direction = position.direction
 
-  if (position.size > 0) {
+  if (instruments[instrument].position.amount > 0) {
     placeExitOrder(conn, instrument)
   }
 }
