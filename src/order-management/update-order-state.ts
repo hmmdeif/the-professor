@@ -31,7 +31,7 @@ export const updateOrders = (conn: Client, data: any) => {
   for (const order of data) {
     if (order.label === 'exit') {
       if (order.order_state === 'filled') {
-        instruments[order.instrument_name].position.exit = null
+        delete instruments[order.instrument_name].position.exit
       }
       instruments[order.instrument_name].position.amount -= order.filled_amount
     } else if (order.order_state === 'filled' || order.order_state === 'cancelled') {
