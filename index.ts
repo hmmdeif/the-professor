@@ -39,6 +39,7 @@ const subscribe = () => {
       `user.orders.${env.instrument}.100ms`
     ]
   }, getOpenOrders.bind(null, conn, env.instrument))
+  conn.sendData('private/enable_cancel_on_disconnect')
 }
 
 // Set up local state. Might expand later so you can trade multiple instruments on a single account
