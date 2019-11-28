@@ -14,7 +14,7 @@ export const startCandleGrabLoop = (conn: Client, instrument: string) => {
 const getTradingViewData = (conn: Client, instrument: string) => {
   let startDate = new Date()
   let endDate = new Date()
-  startDate.setUTCMinutes(startDate.getUTCMinutes() - (env.resolution * 20)) // 20 * config.resolution minute candles away
+  startDate.setUTCMinutes(startDate.getUTCMinutes() - (env.resolution * 60)) // 40 * config.resolution minute candles away
   conn.sendData('public/get_tradingview_chart_data', {
     instrument_name: instrument,
     start_timestamp: startDate.valueOf(),
