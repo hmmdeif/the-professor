@@ -24,11 +24,11 @@ const calcPrice = (multiplier: number, instrument: string, bbradius: number) => 
   return (bbradius * multiplier * (1000 / (instruments[instrument].indicators.adx * instruments[instrument].indicators.adx)) )
 }
 
-const calcBuyPrice = (multiplier: number, instrument: string, bbradius: number) => {
+const calcSellPrice = (multiplier: number, instrument: string, bbradius: number) => {
   return instruments[instrument].indicators.bb.upper + calcPrice(multiplier, instrument, bbradius)
 }
 
-const calcSellPrice = (multiplier: number, instrument: string, bbradius: number) => {
+const calcBuyPrice = (multiplier: number, instrument: string, bbradius: number) => {
   return instruments[instrument].indicators.bb.lower - calcPrice(multiplier, instrument, bbradius)
 }
 
@@ -45,11 +45,11 @@ const placeOrder = (conn: Client, price: number, instrument: string, amount: num
 
 export const adjustOrders = (conn: Client, instrument: string) => {
   const bbradius = instruments[instrument].indicators.bb.upper - instruments[instrument].indicators.bb.middle
-  placeOrder(conn, calcBuyPrice(1, instrument, bbradius), instrument, 10, 'sell')
-  placeOrder(conn, calcBuyPrice(1.5, instrument, bbradius), instrument, 20, 'sell')
-  placeOrder(conn, calcBuyPrice(2, instrument, bbradius), instrument, 50, 'sell')
+  placeOrder(conn, calcSellPrice(1, instrument, bbradius), instrument, 10, 'sell')
+  placeOrder(conn, calcSellPrice(1.5, instrument, bbradius), instrument, 20, 'sell')
+  placeOrder(conn, calcSellPrice(2, instrument, bbradius), instrument, 50, 'sell')
 
-  placeOrder(conn, calcSellPrice(1, instrument, bbradius), instrument, 10, 'buy')
-  placeOrder(conn, calcSellPrice(1.5, instrument, bbradius), instrument, 20, 'buy')
-  placeOrder(conn, calcSellPrice(2, instrument, bbradius), instrument, 50, 'buy')
+  placeOrder(conn, calcBuyPrice(1, instrument, bbradius), instrument, 10, 'buy')
+  placeOrder(conn, calcBuyPrice(1.5, instrument, bbradius), instrument, 20, 'buy')
+  placeOrder(conn, calcBuyPrice(2, instrument, bbradius), instrument, 50, 'buy')
 }
