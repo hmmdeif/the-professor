@@ -1,13 +1,17 @@
 import { Client } from '../client'
 import { instruments, InstrumentOrder } from '../state'
+import { env } from '../../config'
+import chalk = require('chalk')
 
 const addOrder = (data: any) => {
   instruments[data.order.instrument_name].orders.push({ id: data.order.order_id, amount: data.order.amount, direction: data.order.direction, price: data.order.price })
+  console.log('New order - ' + (data.order.direction === 'buy' ? chalk.green('BUY') : chalk.red('SELL')) + ' @ $' + data.order.price + ' for ' + chalk.yellow(data.order.amount))
 }
 
 const editOrder = (order: InstrumentOrder, data: any) => {
   order.amount = data.order.amount
   order.price = data.order.price
+  console.log('Modified order - ' + (order.direction === 'buy' ? chalk.green('BUY') : chalk.red('SELL')) + ' @ $' + order.price + ' for ' + chalk.yellow(order.amount))
 }
 
 const findOrder = (instrument: string, amount: number, direction: string): InstrumentOrder => {
@@ -45,11 +49,11 @@ const placeOrder = (conn: Client, price: number, instrument: string, amount: num
 
 export const adjustOrders = (conn: Client, instrument: string) => {
   const bbradius = instruments[instrument].indicators.bb.upper - instruments[instrument].indicators.bb.middle
-  placeOrder(conn, calcSellPrice(1, instrument, bbradius), instrument, 10, 'sell')
-  placeOrder(conn, calcSellPrice(1.5, instrument, bbradius), instrument, 20, 'sell')
-  placeOrder(conn, calcSellPrice(2, instrument, bbradius), instrument, 50, 'sell')
+  placeOrder(conn, calcSellPrice(1, instrument, bbradius), instrument, env.size, 'sell')
+  placeOrder(conn, calcSellPrice(1.5, instrument, bbradius), instrument, env.size * 2, 'sell')
+  placeOrder(conn, calcSellPrice(2, instrument, bbradius), instrument, env.size * 5, 'sell')
 
-  placeOrder(conn, calcBuyPrice(1, instrument, bbradius), instrument, 10, 'buy')
-  placeOrder(conn, calcBuyPrice(1.5, instrument, bbradius), instrument, 20, 'buy')
-  placeOrder(conn, calcBuyPrice(2, instrument, bbradius), instrument, 50, 'buy')
+  placeOrder(conn, calcBuyPrice(1, instrument, bbradius), instrument, env.size, 'buy')
+  placeOrder(conn, calcBuyPrice(1.5, instrument, bbradius), instrument, env.size * 2, 'buy')
+  placeOrder(conn, calcBuyPrice(2, instrument, bbradius), instrument, env.size * 5, 'buy')
 }

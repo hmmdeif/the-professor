@@ -1,5 +1,6 @@
 import WebSocket = require('ws');
 import EventEmitter from 'events'
+import chalk = require('chalk')
 import { env } from '../config'
 import { DeribitResponse } from './models/deribit-response'
 
@@ -16,7 +17,7 @@ export class Client extends EventEmitter {
   open() {
     this.instance = new WebSocket(env.server)
     this.instance.on('open', () => {
-      console.log('WS: Socket opened')
+      console.log('Connected to ' + chalk.blue('Deribit Exchange'))
       this.reconnectInterval = 10
       this.sendData('public/hello', { client_name: 'hmmdeif trading bot <deif@pm.me>', client_version: '1.0.0' })
     })
@@ -27,7 +28,7 @@ export class Client extends EventEmitter {
           this.tryReconnect()  
           break
         default:
-          console.error('WS: Error received', e)
+          console.error(chalk.red('Socket error'), e)
           break
       }
     })
@@ -44,7 +45,7 @@ export class Client extends EventEmitter {
   }
 
   private tryReconnect() {
-    console.log('WS: Socket reconnecting...')
+    console.log('Attempting to reconnect...')
     this.instance.removeAllListeners();
     setTimeout(() => {
       this.open()
@@ -110,7 +111,7 @@ export class Client extends EventEmitter {
       }
   
     } catch (e) {
-      console.error('Process message error', e)
+      console.error(chalk.red('Process message error'), e)
     }
   }
 
@@ -129,6 +130,7 @@ export class Client extends EventEmitter {
   }
 
   private auth() {
+    console.log('Attempting to auth with credentials: ' + chalk.yellow(env.client_id) + ' ' + chalk.yellow(env.client_secret))
     if (env.client_id) {
       this.sendData('public/auth', {
         grant_type: 'client_credentials',
@@ -146,7 +148,7 @@ export class Client extends EventEmitter {
   }
 
   private storeTokens(data: DeribitResponse) {
-    console.log('Authed successfully')
+    console.log('Authed ' + chalk.green('successfully'))
     if (data.result) {
       this.accessToken = data.result.access_token
       this.refreshToken = data.result.refresh_token
@@ -179,7 +181,7 @@ export class Client extends EventEmitter {
           break
         default:
           if (data.error) {
-            console.log(data.error.message, data.error.data)
+            console.log(chalk.red(data.error.message), data.error.data)
           } else if (this.requests[data.id].callback) {
             this.requests[data.id].callback(data.result, this.requests[data.id].method, this.requests[data.id].params)
           }

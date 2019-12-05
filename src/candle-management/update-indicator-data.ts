@@ -1,6 +1,7 @@
 import { Client } from '../client'
 import { instruments } from '../state'
 import { adjustOrders } from '../order-management/adjust-orders'
+import chalk = require('chalk');
 const tulind = require('tulind');
 
 const calculateBB = async (data: any, params: any) => {
@@ -20,6 +21,8 @@ const calculateADX = async (data: any, params: any) => {
 export const updateIndicators = async (conn: Client, resolution: number, data: any, method: string, params: any) => {
   // console.log('received response', params)
   if (data.status === 'ok') {
+    console.log('Received new candles, recalculating indicators and orders...')
+    console.log('Current price - ' + chalk.blue('$' + data.close[data.close.length - 1]))
     await calculateBB(data, params)
     await calculateADX(data, params)
     adjustOrders(conn, params.instrument_name)
