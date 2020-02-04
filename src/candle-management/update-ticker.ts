@@ -1,9 +1,9 @@
-import { instruments } from '../state'
+import { instrument } from '../state'
 
 export const updateTicker = (data: any) => {
   const update = (info: any) => {
-    instruments[info.instrument_name].bid = info.best_bid_price
-    instruments[info.instrument_name].ask = info.best_ask_price
+    instrument.bid = info.best_bid_price
+    instrument.ask = info.best_ask_price
   }
 
   if (Array.isArray(data)) {

@@ -1,17 +1,5 @@
-import { instruments } from '../state'
+import { instrument, InstrumentOrder } from '../state'
 
 export const removeOrderIfExists = (order: any) => {
-  let found = false
-  let i = 0
-  for (const openOrder of instruments[order.instrument_name].orders) {
-    if (openOrder.id === order.order_id) {
-      found = true
-      break
-    }
-    ++i
-  }
-
-  if (found) {
-    instruments[order.instrument_name].orders.splice(i, 1)
-  }
+  instrument.orders = instrument.orders.filter((o: InstrumentOrder) => o.id !== order.order_id)
 }

@@ -1,21 +1,27 @@
-import { Client } from '../client'
-import { instruments } from '../state'
-import { placeExitOrder } from './update-exit-position'
+import { instrument, conn, Direction, strategy } from '../state'
 import chalk = require('chalk')
 
-const updatePositionState = (conn: Client, instrument: string, position: any) => {
-  instruments[instrument].position.amount = Math.abs(position.size)
-  instruments[instrument].position.price = position.average_price
-  instruments[instrument].position.direction = position.direction
+const getOrderHistory = () => {
+  conn.sendData('private/orderhistory', {
+    instrument: instrument.name,
+    offset: 0,
+    count: 20
+  }, strategy.placeExits)
+}
 
-  if (instruments[instrument].position.amount > 0) {
-    console.log('Current position - ' + (position.direction === 'buy' ? chalk.green('LONG') : chalk.red('SHORT')) + ' @ $' + position.average_price + ' for ' + chalk.yellow(instruments[instrument].position.amount))
-    placeExitOrder(conn, instrument)
+const updatePositionState = (position: any) => {
+  instrument.position.amount = Math.abs(position.size)
+  instrument.position.price = position.average_price
+  instrument.position.direction = position.direction
+
+  if (instrument.position.amount > 0) {
+    console.log('Current position - ' + (position.direction === Direction.buy ? chalk.green('LONG') : chalk.red('SHORT')) + ' @ $' + position.average_price + ' for ' + chalk.yellow(instrument.position.amount))
+    getOrderHistory()
   }
 }
 
-export const getPosition = (conn: Client, instrument: string) => {
+export const getPosition = () => {
   conn.sendData('private/get_position', {
-    instrument_name: instrument
-  }, updatePositionState.bind(null, conn, instrument))
+    instrument_name: instrument.name
+  }, updatePositionState)
 }
