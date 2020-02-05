@@ -6,7 +6,7 @@ const getOrderHistory = () => {
     instrument: instrument.name,
     offset: 0,
     count: 20
-  }, strategy.placeExits)
+  }, strategy.placeExits.bind(strategy))
 }
 
 const updatePositionState = (position: any) => {

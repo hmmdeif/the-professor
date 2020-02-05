@@ -39,5 +39,5 @@ const subscribe = () => {
 
 conn.on('message', processMessage)
 conn.on('authed', subscribe)
-conn.on('closed', strategy.stopRequesting)
+conn.on('closed', strategy.stopRequesting.bind(strategy))
 conn.open()

@@ -1,11 +1,13 @@
 import { Client } from './client'
 import { env } from '../config'
 import { BaseStrategy } from './strategy/base-strategy'
+import { OpenCloseCrossStrategy } from './strategy/occ'
 import { BolingerBandStrategy } from './strategy/bb'
 
 export let conn: Client = new Client()
 
 // Change strategy type below with your implemented one
+// export let strategy: BaseStrategy = new OpenCloseCrossStrategy(240)
 export let strategy: BaseStrategy = new BolingerBandStrategy(3)
 
 export enum Direction {
