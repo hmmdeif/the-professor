@@ -1,7 +1,7 @@
 import { Client } from './client'
 import { env } from '../config'
 import { BaseStrategy } from './strategy/base-strategy'
-import { OpenCloseCrossStrategy } from './strategy/occ'
+// import { OpenCloseCrossStrategy } from './strategy/occ'
 import { BolingerBandStrategy } from './strategy/bb'
 
 export let conn: Client = new Client()
