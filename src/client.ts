@@ -19,7 +19,7 @@ export class Client extends EventEmitter {
     this.instance.on('open', () => {
       console.log('Connected to ' + chalk.blue('Deribit Exchange'))
       this.reconnectInterval = 10
-      this.sendData('public/hello', { client_name: 'hmmdeif trading bot <deif@pm.me>', client_version: '1.0.0' })
+      this.sendData('public/hello', { client_name: 'hmmdeif trading bot <deif@pm.me>', client_version: '1.1.0' })
     })
 
     this.instance.on('error', (e: any) => {
@@ -148,8 +148,8 @@ export class Client extends EventEmitter {
   }
 
   private storeTokens(data: DeribitResponse) {
-    console.log('Authed ' + chalk.green('successfully'))
     if (data.result) {
+      console.log('Authed ' + chalk.green('successfully'))
       this.accessToken = data.result.access_token
       this.refreshToken = data.result.refresh_token
       // Default expiry is 365 days so no real point refreshing

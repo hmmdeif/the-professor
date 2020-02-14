@@ -9,10 +9,24 @@ const add = (data: any) => {
   instrument.position.exits.push({ id: data.order.order_id, amount: data.order.amount, direction: data.order.direction, price: data.order.price })
 }
 
+const removeExit = (order: any) => {
+  instrument.position.exits = instrument.position.exits.filter((o: InstrumentOrder) => o.id !== order.order_id)
+}
+
 export const editExitOrder = (position: InstrumentOrder, amount: number, exitPrice: number) => {
   conn.sendData('private/edit', { order_id: position.id, amount: amount, price: exitPrice }, edit.bind(null, position))
 }
 
 export const addExitOrder = (direction: Direction, amount: number, exitPrice: number) => {
-  conn.sendData(`private/${direction}`, { instrument_name: instrument.name, amount: instrument.position.amount, type: 'limit', label: 'exit', price: exitPrice }, add)
+  conn.sendData(`private/${direction}`, { instrument_name: instrument.name, amount: amount, type: 'limit', label: 'exit', price: exitPrice, reduce_only: true }, add)
+}
+
+export const addStopOrder = (direction: Direction, amount: number, exitPrice: number) => {
+  conn.sendData(`private/${direction}`, { instrument_name: instrument.name, amount: amount, type: 'stop_market', label: 'exit', stop_price: exitPrice, trigger: 'last_price', reduce_only: true }, add)
+}
+
+export const cancelAllExits = () => {
+  for (const o of instrument.position.exits) {
+    conn.sendData('private/cancel', { order_id: o.id }, removeExit)
+  }
 }

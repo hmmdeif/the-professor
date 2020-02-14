@@ -1,6 +1,6 @@
 import { getTradingViewData } from '../candle-management/trading-view-data'
 import { editOrder, addOrder } from '../order-management/adjust-orders';
-import { editExitOrder, addExitOrder } from '../order-management/update-exit-position';
+import { editExitOrder, addExitOrder, cancelAllExits, addStopOrder } from '../order-management/update-exit-position';
 import { InstrumentOrder, Direction } from '../state';
 
 export abstract class BaseStrategy {
@@ -29,7 +29,7 @@ export abstract class BaseStrategy {
     }
   }
 
-  public abstract async candleDataReceived (resolution: number, data: any): Promise<void>
+  public abstract async candleDataReceived (resolution: number, multiplier: number, data: any): Promise<void>
 
   public abstract placeExits(orderHistory?: any): void
 
@@ -47,5 +47,13 @@ export abstract class BaseStrategy {
 
   protected addExitOrder(direction: Direction, amount: number, price: number) {
     addExitOrder(direction, amount, price)
+  }
+
+  protected addStopOrder(direction: Direction, amount: number, price: number) {
+    addStopOrder(direction, amount, price)
+  }
+
+  protected cancelAllExits() {
+    cancelAllExits()
   }
 }

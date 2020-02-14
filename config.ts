@@ -2,9 +2,9 @@ import { config } from 'dotenv'
 config()
 
 const getServerUrl = (mode: string): string => {
-  let url = 'wss://testapp.deribit.com/ws/api/v2'
+  let url = 'wss://test.deribit.com/ws/api/v2'
   if (mode && mode.toLowerCase() !== 'test') {
-    url = url.replace('test', '')
+    url = url.replace('test', 'www')
   }
   return url
 }

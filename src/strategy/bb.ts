@@ -54,7 +54,7 @@ export class BolingerBandStrategy extends BaseStrategy {
     }
   }
   
-  public async candleDataReceived(resolution: number, data: any) {
+  public async candleDataReceived(resolution: number, multiplier: number, data: any) {
     await this.calculateBB(data)
     await this.calculateADX(data)
   
