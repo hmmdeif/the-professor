@@ -7,7 +7,7 @@ import { BolingerBandStrategy } from './strategy/bb'
 export let conn: Client = new Client()
 
 // Change strategy type below with your implemented one
-// export let strategy: BaseStrategy = new OpenCloseCrossStrategy(240)
+// export let strategy: BaseStrategy = new OpenCloseCrossStrategy(1)
 export let strategy: BaseStrategy = new BolingerBandStrategy(3)
 
 export enum Direction {
@@ -19,7 +19,8 @@ export interface InstrumentOrder {
   id: string
   price: number
   amount: number
-  direction: Direction
+  direction: Direction,
+  type: string
 }
 
 interface Position {

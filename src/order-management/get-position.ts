@@ -17,6 +17,8 @@ const updatePositionState = (position: any) => {
   if (instrument.position.amount > 0) {
     console.log('Current position - ' + (position.direction === Direction.buy ? chalk.green('LONG') : chalk.red('SHORT')) + ' @ $' + position.average_price + ' for ' + chalk.yellow(instrument.position.amount))
     getOrderHistory()
+  } else {
+    strategy.startCandleGrabLoop()
   }
 }
 

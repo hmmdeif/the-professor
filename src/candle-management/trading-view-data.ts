@@ -11,12 +11,12 @@ const convertResolutionToString = (resolution: number): [string, number] => {
   return [resolution.toString(), 1]
 }
 
-export const getTradingViewData = (startDate: Date, endDate: Date, resolution: number) => {
+export const getTradingViewData = (startDate: Date, endDate: Date, resolution: number, orderHistoryCall: boolean = false) => {
   let [res, multiplier] = convertResolutionToString(resolution)
   conn.sendData('public/get_tradingview_chart_data', {
     instrument_name: instrument.name,
     start_timestamp: startDate.valueOf(),
     end_timestamp: endDate.valueOf(),
     resolution: res
-  }, updateIndicators.bind(null, resolution, multiplier))
+  }, updateIndicators.bind(null, resolution, multiplier, orderHistoryCall))
 }
