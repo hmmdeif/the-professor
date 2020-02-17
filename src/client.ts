@@ -3,6 +3,7 @@ import EventEmitter from 'events'
 import chalk = require('chalk')
 import { env } from '../config'
 import { DeribitResponse } from './models/deribit-response'
+import { instrument } from './state';
 
 export class Client extends EventEmitter {
   private instance: WebSocket
@@ -19,7 +20,7 @@ export class Client extends EventEmitter {
     this.instance.on('open', () => {
       console.log('Connected to ' + chalk.blue('Deribit Exchange'))
       this.reconnectInterval = 10
-      this.sendData('public/hello', { client_name: 'hmmdeif trading bot <deif@pm.me>', client_version: '1.1.0' })
+      this.sendData('public/hello', { client_name: 'hmmdeif trading bot <deif@pm.me> (https://github.com/hmmdeif/the-professor)', client_version: '1.1.0' })
     })
 
     this.instance.on('error', (e: any) => {
@@ -47,6 +48,8 @@ export class Client extends EventEmitter {
   private tryReconnect() {
     console.log('Attempting to reconnect...')
     this.instance.removeAllListeners();
+    instrument.orders = []
+    instrument.position.exits = []
     setTimeout(() => {
       this.open()
     }, this.reconnectInterval * 1000)

@@ -4,7 +4,7 @@ import chalk = require('chalk')
 const edit = (order: InstrumentOrder, data: any) => {
   order.amount = data.order.amount
   order.price = data.order.price
-  console.log('Modified exit - ' + chalk.yellow(order.type) + (order.direction === Direction.buy ? chalk.green('BUY') : chalk.red('SELL')) + ' @ $' + order.price + ' for ' + chalk.yellow(order.amount))
+  console.log('Modified exit - ' + chalk.yellow(order.type) + ' ' + (order.direction === Direction.buy ? chalk.green('BUY') : chalk.red('SELL')) + ' @ $' + order.price + ' for ' + chalk.yellow(order.amount))
 }
 
 const add = (data: any) => {
